@@ -14,7 +14,7 @@ class AjaxTagLibSpec extends Specification {
     }
     void 'test remoteForm with params attribute'() {
         when:
-        def template = '<ajax:formRemote name="myForm" url="[controller:\'person\', action:\'list\']" params="[var1:\'one\', var2:\'two\']"><g:textField name="foo" /></ajax:formRemote>'
+        def template = '<g:formRemote name="myForm" url="[controller:\'person\', action:\'list\']" params="[var1:\'one\', var2:\'two\']"><g:textField name="foo" /></g:formRemote>'
         applyTemplate(template)
 
         then:
@@ -25,9 +25,9 @@ class AjaxTagLibSpec extends Specification {
     void 'test formRemote with String url'() {
         when:
         def template = '''\
-<ajax:formRemote name="myForm" method="GET" url="/dirt-grails/ruleDetails/saveDynamicParameters" >\
+<g:formRemote name="myForm" method="GET" url="/dirt-grails/ruleDetails/saveDynamicParameters" >\
 <g:textField name="foo" />\
-</ajax:formRemote>'''
+</g:formRemote>'''
         def result = applyTemplate(template)
 
         then:
@@ -47,10 +47,10 @@ action="/dirt-grails/ruleDetails/saveDynamicParameters" id="myForm"><input type=
     void 'test formRemote with overrides'() {
         when:
         def template = '''\
-<ajax:formRemote name="myForm" method="GET" action="/person/showOld?var1=one&var2=two"
+<g:formRemote name="myForm" method="GET" action="/person/showOld?var1=one&var2=two"
               url="[controller:'person', action:'show', params: [var1:'one', var2:'two']]" >\
 <g:textField name="foo" />\
-</ajax:formRemote>'''
+</g:formRemote>'''
         def result = applyTemplate(template)
 
         then:
@@ -62,7 +62,7 @@ action="/person/showOld?var1=one&var2=two" id="myForm"><input type="text" name="
     @Issue('GRAILS-4672')
     void 'test remoteLink with space before GString variable'() {
         when:
-        def template = '<ajax:remoteLink controller="people" action="theAction" params="someParams" update="success" onComplete="doSomething();" title="The Album Is ${variable}" class="hoverLT">${variable}</ajax:remoteLink>'
+        def template = '<g:remoteLink controller="people" action="theAction" params="someParams" update="success" onComplete="doSomething();" title="The Album Is ${variable}" class="hoverLT">${variable}</g:remoteLink>'
         def result = applyTemplate(template, [variable: 'Undertow'])
 
         then:
@@ -72,7 +72,7 @@ action="/person/showOld?var1=one&var2=two" id="myForm"><input type="text" name="
     @Issue('GRAILS-4672')
     void 'test remoteLink with space before and after GString variable'() {
         when:
-        def template = '<ajax:remoteLink controller="people" action="theAction" params="someParams" update="success" onComplete="doSomething();" title="The Album Is ${variable} By Tool" class="hoverLT">${variable}</ajax:remoteLink>'
+        def template = '<g:remoteLink controller="people" action="theAction" params="someParams" update="success" onComplete="doSomething();" title="The Album Is ${variable} By Tool" class="hoverLT">${variable}</g:remoteLink>'
         def result = applyTemplate(template, [variable: 'Undertow'])
 
         then:

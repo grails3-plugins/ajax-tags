@@ -24,8 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired
 
 class AjaxTagLib {
 
-    static namespace = 'ajax'
-
     static encodeAsForTags = [remoteFunction: 'raw',
                               remoteLink: 'raw',
                               remoteField: 'raw'
