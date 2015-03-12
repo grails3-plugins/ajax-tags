@@ -32,7 +32,7 @@ class AjaxTagLib {
     @Autowired(required=false)
     JavascriptProvider provider = new JQueryJavascriptProvider()
 
-    // TODO
+    @Autowired
     CodecLookup codecLookup
 
     Closure formRemote = { attrs, body ->
@@ -126,7 +126,7 @@ class AjaxTagLib {
      * @attr elementId the DOM element id
      */
     Closure remoteLink = { attrs, body ->
-        Encoder htmlEncoder = codecLookup?.lookupEncoder('HTML') ?: new NoOpEncoder()
+        Encoder encoder = getHtmlEncoder()
         out << '<a href="'
 
         def cloned = deepClone(attrs)
@@ -146,12 +146,12 @@ class AjaxTagLib {
         // handle elementId like link
         def elementId = attrs.remove('elementId')
         if (elementId) {
-            out << " id=\"${htmlEncoder.encode(elementId)}\""
+            out << " id=\"${encoder.encode(elementId)}\""
         }
 
         // process remaining attributes
         attrs.each { k,v ->
-            out << ' ' << htmlEncoder.encode(k) << "=\"" << htmlEncoder.encode(v) << "\""
+            out << ' ' << encoder.encode(k) << "=\"" << encoder.encode(v) << "\""
         }
         out << ">"
         // output the body
@@ -179,12 +179,12 @@ class AjaxTagLib {
      * @attr method The method to use the execute the call (defaults to "post")
      */
     Closure remoteField = { attrs, body ->
-        Encoder htmlEncoder = codecLookup?.lookupEncoder('HTML') ?: new NoOpEncoder()
+        Encoder encoder = getHtmlEncoder()
         def paramName = attrs.paramName ? attrs.remove('paramName') : 'value'
         def value = attrs.remove('value')
         if (!value) value = ''
 
-        out << "<input type=\"text\" name=\"${htmlEncoder.encode(attrs.remove('name'))}\" value=\"${htmlEncoder.encode(value)}\" onkeyup=\""
+        out << "<input type=\"text\" name=\"${encoder.encode(attrs.remove('name'))}\" value=\"${encoder.encode(value)}\" onkeyup=\""
 
         if (attrs.params) {
             if (attrs.params instanceof Map) {
@@ -202,7 +202,7 @@ class AjaxTagLib {
         out << "\""
         attrs.remove('url')
         attrs.each { k,v->
-            out << ' ' << htmlEncoder.encode(k) << "=\"" << htmlEncoder.encode(v) << "\""
+            out << ' ' << encoder.encode(k) << "=\"" << encoder.encode(v) << "\""
         }
         out <<" />"
     }
@@ -234,6 +234,17 @@ class AjaxTagLib {
         }
     }
 
+    private Encoder getHtmlEncoder() {
+        if(!codecLookup) {
+            throwTagError("The codecLookup property in AjaxTagLib has not been initialized.")
+        }
+        Encoder encoder = codecLookup.lookupEncoder('HTML')
+        if(!encoder) {
+            throwTagError("HTML Encoder could not be loaded.")
+        }
+        encoder
+    }
+
     /**
      * Normal map implementation does a shallow clone. This implements a deep clone for maps
      * using recursion.
@@ -249,33 +260,6 @@ class AjaxTagLib {
             }
         }
         cloned
-    }
-}
-
-class NoOpEncoder implements Encoder {
-
-    @Override
-    Object encode(Object o) {
-        o
-    }
-
-    @Override
-    boolean isSafe() {
-        true
-    }
-
-    @Override
-    boolean isApplyToSafelyEncoded() {
-        true
-    }
-
-    @Override
-    void markEncoded(CharSequence string) {
-
-    }
-
-    @Override
-    CodecIdentifier getCodecIdentifier() {
     }
 }
 
