@@ -1,17 +1,16 @@
-package ajaxtags
+package org.grails.plugins.ajaxtags
 
-import grails.plugins.ajaxtags.JavascriptProvider
-import grails.test.mixin.TestFor
+import grails.testing.web.taglib.TagLibUnitTest
 import org.grails.taglib.GrailsTagException
 import spock.lang.Issue
 import spock.lang.Specification
 
-@TestFor(AjaxTagLib)
-class AjaxTagLibSpec extends Specification {
+class AjaxTagLibSpec extends Specification implements TagLibUnitTest<AjaxTagLib> {
 
     def setup() {
         tagLib.provider = new TestProvider()
     }
+
     void 'test remoteForm with params attribute'() {
         when:
         def template = '<g:formRemote name="myForm" url="[controller:\'person\', action:\'list\']" params="[var1:\'one\', var2:\'two\']"><g:textField name="foo" /></g:formRemote>'
@@ -82,7 +81,6 @@ action="/person/showOld?var1=one&var2=two" id="myForm"><input type="text" name="
 
 
 class TestProvider implements JavascriptProvider {
-
     def doRemoteFunction(Object taglib, Object attrs, Object out) {
         out << "<remote>"
     }

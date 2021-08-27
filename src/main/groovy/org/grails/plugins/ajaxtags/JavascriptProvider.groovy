@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package grails.plugins.ajaxtags
+package org.grails.plugins.ajaxtags
 
 /**
  * Defines methods that a JavaScript provider must implement.
