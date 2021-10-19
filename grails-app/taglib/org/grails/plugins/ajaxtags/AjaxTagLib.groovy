@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ajaxtags
+package org.grails.plugins.ajaxtags
 
-import grails.plugins.ajaxtags.JavascriptProvider
-import org.grails.encoder.CodecIdentifier
 import org.grails.encoder.CodecLookup
 import org.grails.encoder.Encoder
-import org.grails.plugins.ajaxtags.JQueryJavascriptProvider
 import org.springframework.beans.factory.annotation.Autowired
 
 class AjaxTagLib {
 
     static encodeAsForTags = [remoteFunction: 'raw',
-                              remoteLink: 'raw',
-                              remoteField: 'raw'
+                              remoteLink    : 'raw',
+                              remoteField   : 'raw'
     ]
 
-    @Autowired(required=false)
+    @Autowired(required = false)
     JavascriptProvider provider = new JQueryJavascriptProvider()
 
     @Autowired
@@ -54,9 +51,9 @@ class AjaxTagLib {
         // prepare form settings
         provider.prepareAjaxForm(attrs)
 
-        def params = [onsubmit:remoteFunction(attrs) + 'return false',
-                      method: (attrs.method? attrs.method : 'post'),
-                      action: (attrs.action? attrs.action : url instanceof CharSequence ? url.toString() : createLink(url))]
+        def params = [onsubmit: remoteFunction(attrs) + 'return false',
+                      method  : (attrs.method ? attrs.method : 'post'),
+                      action  : (attrs.action ? attrs.action : url instanceof CharSequence ? url.toString() : createLink(url))]
         attrs.remove('url')
         params.putAll(attrs)
         if (params.name && !params.id) {
@@ -67,7 +64,7 @@ class AjaxTagLib {
         // See http://jira.codehaus.org/browse/GRAILS-2839
         params.remove 'name'
 
-        out << withTag(name:'form',attrs:params) {
+        out << withTag(name: 'form', attrs: params) {
             out << body()
         }
     }
@@ -150,7 +147,7 @@ class AjaxTagLib {
         }
 
         // process remaining attributes
-        attrs.each { k,v ->
+        attrs.each { k, v ->
             out << ' ' << encoder.encode(k) << "=\"" << encoder.encode(v) << "\""
         }
         out << ">"
@@ -189,22 +186,20 @@ class AjaxTagLib {
         if (attrs.params) {
             if (attrs.params instanceof Map) {
                 attrs.params[paramName] = new JavascriptValue('this.value')
-            }
-            else {
+            } else {
                 attrs.params += "+'${paramName}='+this.value"
             }
-        }
-        else {
+        } else {
             attrs.params = "'${paramName}='+this.value"
         }
         out << remoteFunction(attrs)
         attrs.remove('params')
         out << "\""
         attrs.remove('url')
-        attrs.each { k,v->
+        attrs.each { k, v ->
             out << ' ' << encoder.encode(k) << "=\"" << encoder.encode(v) << "\""
         }
-        out <<" />"
+        out << " />"
     }
 
     /**
@@ -223,10 +218,10 @@ class AjaxTagLib {
         attrs.forSubmitTag = ".form"
         provider.prepareAjaxForm(attrs)
         def params = [onclick: remoteFunction(attrs) + 'return false',
-                      type: 'button',
-                      name: attrs.remove('name'),
-                      value: attrs.remove('value'),
-                      id: attrs.remove('id'),
+                      type   : 'button',
+                      name   : attrs.remove('name'),
+                      value  : attrs.remove('value'),
+                      id     : attrs.remove('id'),
                       'class': attrs.remove('class')]
 
         out << withTag(name: 'input', attrs: params) {
@@ -235,11 +230,11 @@ class AjaxTagLib {
     }
 
     private Encoder getHtmlEncoder() {
-        if(!codecLookup) {
+        if (!codecLookup) {
             throwTagError("The codecLookup property in AjaxTagLib has not been initialized.")
         }
         Encoder encoder = codecLookup.lookupEncoder('HTML')
-        if(!encoder) {
+        if (!encoder) {
             throwTagError("HTML Encoder could not be loaded.")
         }
         encoder
@@ -251,11 +246,10 @@ class AjaxTagLib {
      */
     private deepClone(Map map) {
         def cloned = [:]
-        map.each { k,v ->
+        map.each { k, v ->
             if (v instanceof Map) {
                 cloned[k] = deepClone(v)
-            }
-            else {
+            } else {
                 cloned[k] = v
             }
         }

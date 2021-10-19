@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 package org.grails.plugins.ajaxtags
-
-import grails.plugins.ajaxtags.JavascriptProvider
-
-
 /**
  * @author Sergey Nebolsin (nebolsin@prophotos.ru)
  * @author Finn Herpich (finn.herpich <at> marfinn-software <dot> de)
@@ -97,7 +93,7 @@ class JQueryJavascriptProvider implements JavascriptProvider {
         }
 
         // build url
-        def url = attrs.url ? taglib.createLink(attrs.remove('url')) : taglib.createLink(attrs);
+        def url = attrs.url ? taglib.createLink(attrs.remove('url')) : taglib.createLink(attrs)
         out << ", url:'${url}'"
 
         // Add callback
@@ -182,8 +178,7 @@ class JQueryJavascriptProvider implements JavascriptProvider {
         // Fix for http://jira.codehaus.org/browse/GRAILSPLUGINS-1865
         if (attrs.forSubmitTag) {
             attrs.params = "jQuery(this).parents('form:first').serialize()".toString()
-        }
-        else {
+        } else {
             attrs.params = "jQuery(this).serialize()".toString()
         }
     }

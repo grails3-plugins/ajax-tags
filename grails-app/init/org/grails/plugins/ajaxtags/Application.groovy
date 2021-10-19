@@ -1,4 +1,4 @@
-package ajaxtags
+package org.grails.plugins.ajaxtags
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
