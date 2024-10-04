@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
@@ -8,7 +7,7 @@ buildscript {
     }
 }
 
-version "2.0.0-SNAPSHOT"
+version project.projectVersion
 group "org.grails.plugins"
 
 apply plugin: 'maven-publish'
@@ -23,7 +22,6 @@ sourceCompatibility = 1.11
 targetCompatibility = 1.11
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
 }
