@@ -35,13 +35,6 @@ dependencyManagement {
     applyMavenExclusions false
 }
 
-configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
-}
-
 dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly "org.springframework.boot:spring-boot-starter-logging"
