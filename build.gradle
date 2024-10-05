@@ -10,13 +10,10 @@ buildscript {
 version project.projectVersion
 group "org.grails.plugins"
 
-apply plugin: 'maven-publish'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: "io.spring.dependency-management"
-apply plugin:"org.grails.grails-plugin"
-apply plugin:"org.grails.grails-gsp"
+apply plugin: 'org.grails.grails-plugin'
+apply plugin: 'org.grails.grails-gsp'
 apply plugin: "org.grails.grails-doc"
+apply plugin: "org.grails.internal.grails-plugin-publish"
 
 sourceCompatibility = 1.11
 targetCompatibility = 1.11
@@ -68,3 +65,14 @@ tasks.withType(GroovyCompile) {
 }
 // enable if you wish to package this plugin as a standalone application
 bootJar.enabled = false
+
+grailsPublish {
+    userOrg = "grails"
+    githubSlug = 'grails3-plugins/ajax-tags'
+    license {
+        name = 'Apache-2.0'
+    }
+    title = "Grails Ajax Tags Plugin"
+    desc = "The ajax-tags plugin provides AJAX related GSP tags."
+    developers = [osscontributor: "Jeff Brown"]
+}
